@@ -13,8 +13,7 @@ class TwoPlayerGame:
       """
       Gets next turn, returns true if the game is over
       """
-      game_over = self._perform_move()
-      return game_over
+      
          
    
    def _perform_move(self):
