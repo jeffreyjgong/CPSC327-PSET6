@@ -1,30 +1,24 @@
 import sys
+from Game import Santorini
 
 class GameManager:
    """
    A class to represent the Game CLI interface
-
-   Attributes
-   ----------
-   TODO
    """
    def __init__(self):
       """
-      Constructs the necessary attributes for the BankCLI object
+      Constructs necessary attributes for GameManager
       """
-      self._whitePlayerType = "human"
-      self._bluePlayerType = "human"
-      self._enableUndoRedo = "off"
-      self._enableScoreDisplay = "off"
+      pass
    
    def run(self, params):
       """
       Executes the game loop
       """
-      self._whitePlayerType = params[0]
-      self._bluePlayerType = params[1]
-      self._enableUndoRedo = params[2]
-      self._enableScoreDisplay = params[3]
+      self._game = Santorini(white_player_type = params[0], blue_player_type = params[1], enable_undo_redo = params[2], enable_score_display = params[3])
+      while self._game.next_turn():
+         pass
+      
 
 if __name__ == '__main__':
    allowedParams = [['human', 'heuristic', 'random'], ['human', 'heuristic', 'random'], ['on', 'off'], ['on', 'off']]
