@@ -120,6 +120,9 @@ class Santorini(TwoPlayerGame):
 
       # add command object to history
 
+      # print board
+      print(self._board)
+      
       # add to turn
       self._turn_number += 1
 
