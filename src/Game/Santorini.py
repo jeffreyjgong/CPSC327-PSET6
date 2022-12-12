@@ -73,7 +73,7 @@ class Santorini(TwoPlayerGame):
          worker_name = cur_player.select_worker()
          if (worker_name not in self._players[0].workers and worker_name not in self._players[1].workers):
             print('Not a valid worker')
-         elif (worker_name in self._players[1-self._cur_player_id]):
+         elif (worker_name in self._players[1-self._cur_player_id].workers):
             print('That is not your worker')
          else:
             # TODO: check if this is the right string to print
