@@ -2,10 +2,11 @@ from .Board.Board import Board
 from .Player.HeuristicPlayer import HeuristicPlayer
 from .Player.HumanPlayer import HumanPlayer
 from .Player.RandomPlayer import RandomPlayer
+from .TwoPlayerGame import TwoPlayerGame
 
-class Santorini :
+class Santorini(TwoPlayerGame):
    """
-   An abstract template class to setup a two player game
+   A class to set up the Santorini Board game
    """
    def __init__(self, **kwargs):
       """
