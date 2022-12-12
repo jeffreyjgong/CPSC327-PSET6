@@ -20,8 +20,7 @@ class Santorini :
       self._white_id = 0
       self._blue_id = 1
       self._players = [None for _ in range(0,2)]
-      
-      # TODO: can move this to a function if needed 
+
       self._initialize_player(self._white_player_type, self._white_id)
       self._initialize_player(self._blue_player_type, self._blue_id)
       
@@ -42,8 +41,8 @@ class Santorini :
 
    def _initialize_player(self, player_type, player_id):
       if (player_type == 'human'):
-         self._players[player_id] = HumanPlayer()
+         self._players[player_id] = HumanPlayer(player_id)
       elif (self._blue_player_type == 'heuristic'):
-         self._players[player_id] = HeuristicPlayer()
+         self._players[player_id] = HeuristicPlayer(player_id)
       else:
-         self._players[player_id] = RandomPlayer()
+         self._players[player_id] = RandomPlayer(player_id)

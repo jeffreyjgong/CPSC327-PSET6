@@ -1,2 +1,8 @@
 class Player:
-   pass
+   """
+   An abstract class to represent a player of the game
+   """
+   
+   def __init__(self, player_id):
+      self.player_id = player_id
+
