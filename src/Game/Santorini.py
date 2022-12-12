@@ -1,3 +1,8 @@
+from .Board.Board import Board
+from .Player.HeuristicPlayer import HeuristicPlayer
+from .Player.HumanPlayer import HumanPlayer
+from .Player.RandomPlayer import RandomPlayer
+
 class Santorini :
    """
    An abstract template class to setup a two player game
@@ -10,6 +15,20 @@ class Santorini :
       self._white_player_type = kwargs['white_player_type']
       self._blue_player_type = kwargs['blue_player_type']
       self._enable_score_display = kwargs['enable_score_display']
+      self._board = Board()
+      self._turn_number = 1
+      self._white_id = 0
+      self._blue_id = 1
+      self._players = [None for _ in range(0,2)]
+      
+      # TODO: can move this to a function if needed 
+      self._initialize_player(self._white_player_type, self._white_id)
+      self._initialize_player(self._blue_player_type, self._blue_id)
+      
+      self._cur_player_id = self._white_id
+
+      # TODO: add history of commands
+
       super().__init__()
    
    def _perform_move(self):
@@ -20,4 +39,11 @@ class Santorini :
    
    def _redo_step(self):
       pass
-   
+
+   def _initialize_player(self, player_type, player_id):
+      if (player_type == 'human'):
+         self._players[player_id] = HumanPlayer()
+      elif (self._blue_player_type == 'heuristic'):
+         self._players[player_id] = HeuristicPlayer()
+      else:
+         self._players[player_id] = RandomPlayer()
