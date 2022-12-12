@@ -16,5 +16,8 @@ class GameManager:
       Executes the game loop
       """
       self._game = Santorini(white_player_type = params[0], blue_player_type = params[1], enable_undo_redo = params[2], enable_score_display = params[3])
+      print(self._game._board)
 
-      # TODO: perform move and check if game is over while loop
+      # next turn
+      while(True):
+         self._game.get_next_turn()

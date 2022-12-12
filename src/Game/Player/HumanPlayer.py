@@ -9,10 +9,13 @@ class HumanPlayer(Player):
       super().__init__(player_id, board)
    
    def select_worker(self):
-      pass
+      worker_name = input('Select a worker to move\n')
+      return worker_name
    
    def select_direction(self):
-      return super().select_direction()
+      direction = input('Select a direction to move (n, ne, e, se, s, sw, w, nw)\n')
+      return direction
    
    def select_build_direction(self):
-      return super().select_build_direction()
+      build_direction = input('Select a direction to build (n, ne, e, se, s, sw, w, nw)\n')
+      return build_direction

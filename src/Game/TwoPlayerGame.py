@@ -17,7 +17,7 @@ class TwoPlayerGame:
          
    def _perform_move(self):
       """
-      Performs the move, returns true if game is over
+      Performs the move, exits if game is over
       """
       pass
    
