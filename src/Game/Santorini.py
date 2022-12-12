@@ -21,8 +21,8 @@ class Santorini(TwoPlayerGame):
       self._players = [None for _ in range(0,2)]
       self._player_factory = PlayerFactory()
 
-      self._players[self._white_id] = self._player_factory.get_player(self._white_player_type, self._white_id)
-      self._players[self._blue_id] = self._player_factory.get_player(self._blue_player_type, self._blue_id)
+      self._players[self._white_id] = self._player_factory.get_player(self._white_player_type, self._white_id, self._board)
+      self._players[self._blue_id] = self._player_factory.get_player(self._blue_player_type, self._blue_id, self._board)
       
       self._cur_player_id = self._white_id
 

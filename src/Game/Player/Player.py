@@ -3,7 +3,8 @@ class Player:
    An abstract class to represent a player of the game
    """
    
-   def __init__(self, player_id):
+   def __init__(self, player_id, board):
+      self._board = board
       self.player_id = player_id
 
    def select_worker(self):
