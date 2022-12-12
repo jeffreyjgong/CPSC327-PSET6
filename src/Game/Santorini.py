@@ -1,8 +1,6 @@
 from .Board.Board import Board
-from .Player.HeuristicPlayer import HeuristicPlayer
-from .Player.HumanPlayer import HumanPlayer
-from .Player.RandomPlayer import RandomPlayer
 from .TwoPlayerGame import TwoPlayerGame
+from .Player.PlayerFactory import PlayerFactory
 
 class Santorini(TwoPlayerGame):
    """
@@ -21,9 +19,10 @@ class Santorini(TwoPlayerGame):
       self._white_id = 0
       self._blue_id = 1
       self._players = [None for _ in range(0,2)]
+      self._player_factory = PlayerFactory()
 
-      self._initialize_player(self._white_player_type, self._white_id)
-      self._initialize_player(self._blue_player_type, self._blue_id)
+      self._players[self._white_id] = self._player_factory.get_player(self._white_player_type, self._white_id)
+      self._players[self._blue_id] = self._player_factory.get_player(self._blue_player_type, self._blue_id)
       
       self._cur_player_id = self._white_id
 
@@ -39,11 +38,3 @@ class Santorini(TwoPlayerGame):
    
    def _redo_step(self):
       pass
-
-   def _initialize_player(self, player_type, player_id):
-      if (player_type == 'human'):
-         self._players[player_id] = HumanPlayer(player_id)
-      elif (self._blue_player_type == 'heuristic'):
-         self._players[player_id] = HeuristicPlayer(player_id)
-      else:
-         self._players[player_id] = RandomPlayer(player_id)
