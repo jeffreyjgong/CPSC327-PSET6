@@ -18,6 +18,7 @@ class Santorini(TwoPlayerGame):
       self._turn_number = 1
       self._white_id = 0
       self._blue_id = 1
+      self._player_colors_and_workers = dict([(0, ('white', 'AB')), (1, ('blue', 'YZ'))])
       self._players = [None for _ in range(0,2)]
       self._player_factory = PlayerFactory()
 
@@ -31,7 +32,9 @@ class Santorini(TwoPlayerGame):
       super().__init__(**kwargs)
    
    def _perform_move(self):
-      pass
+      print(f'Turn: {self._turn_number}, {self._player_colors_and_workers.get(self._cur_player_id)[0]} ({self._player_colors_and_workers.get(self._cur_player_id)[1]})')
+
+      self._players[self._cur_player_id] 
    
    def _undo_step(self):
       pass

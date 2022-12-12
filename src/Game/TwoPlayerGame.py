@@ -9,19 +9,27 @@ class TwoPlayerGame:
       """
       self._enable_undo_redo = kwargs.get('enable_undo_redo')
 
-   def next_turn(self):
+   def get_next_turn(self):
       """
-      Gets next turn, returns true if the game is over
+      Gets next turn from current player
       """
-      
+      pass
          
-   
    def _perform_move(self):
+      """
+      Performs the move, returns true if game is over
+      """
       pass
    
    def _undo_step(self):
+      """
+      Undo the previous move
+      """
       pass
    
    def _redo_step(self):
+      """
+      Reverts an undo
+      """
       pass
    

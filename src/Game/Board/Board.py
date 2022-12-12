@@ -63,6 +63,6 @@ class Board:
                      has_worker = True
             if not has_worker:
                board_str_lst.append(' ')
-         board_str_lst.append("|\n")
+         board_str_lst.append('|\n')
       board_str_lst.append('+--+--+--+--+--+\n')
-      return "".join(board_str_lst)
+      return ''.join(board_str_lst)
