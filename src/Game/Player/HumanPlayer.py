@@ -9,7 +9,7 @@ class HumanPlayer(Player):
       super().__init__(player_id, board)
    
    def select_worker(self):
-      return super().select_worker()
+      pass
    
    def select_direction(self):
       return super().select_direction()

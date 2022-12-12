@@ -11,9 +11,9 @@ class Santorini(TwoPlayerGame):
       Initializes the class
       """
       
-      self._white_player_type = kwargs['white_player_type']
-      self._blue_player_type = kwargs['blue_player_type']
-      self._enable_score_display = kwargs['enable_score_display']
+      self._white_player_type = kwargs.get('white_player_type')
+      self._blue_player_type = kwargs.get('blue_player_type')
+      self._enable_score_display = kwargs.get('enable_score_display')
       self._board = Board()
       self._turn_number = 1
       self._white_id = 0
@@ -28,7 +28,7 @@ class Santorini(TwoPlayerGame):
 
       # TODO: add history of commands
 
-      super().__init__()
+      super().__init__(**kwargs)
    
    def _perform_move(self):
       pass

@@ -17,8 +17,8 @@ class Board:
       #setup workers
       self._worker_names = [['A', 'B'], ['Y', 'Z']]
       self._workers = {}
-      self._workers['A'] = self._positions[1][3]
-      self._workers['B'] = self._positions[3][1]
+      self._workers['A'] = self._positions[3][1]
+      self._workers['B'] = self._positions[1][3]
       self._workers['Y'] = self._positions[1][1]
       self._workers['Z'] = self._positions[3][3]
 
