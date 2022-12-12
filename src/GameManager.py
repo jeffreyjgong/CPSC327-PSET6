@@ -1,5 +1,5 @@
 import sys
-from Game import Santorini
+from Game.Santorini import Santorini
 
 class GameManager:
    """
@@ -21,22 +21,21 @@ class GameManager:
       
 
 if __name__ == '__main__':
-   allowedParams = [['human', 'heuristic', 'random'], ['human', 'heuristic', 'random'], ['on', 'off'], ['on', 'off']]
+   allowed_params = [['human', 'heuristic', 'random'], ['human', 'heuristic', 'random'], ['on', 'off'], ['on', 'off']]
 
    # initially loaded with default values
    params = ['human', 'human', 'off', 'off']
 
    for i in range(1, len(sys.argv)):
       # check if valid
-      if (sys.argv[i] not in allowedParams[i-1]):
+      if (sys.argv[i] not in allowed_params[i-1]):
          sys.exit("Invalid command line argument: " + sys.argv[i])
       
       # set param
       params[i-1] = sys.argv[i]
    
-   # edge case
+   # Turn history off if two computers
    if params[0] != 'human' and params[1] != 'human':
-      print('Turning history off, as two computers are playing against each other.')
       params[2] = 'off'
    
    SantoriniCLI = GameManager()
