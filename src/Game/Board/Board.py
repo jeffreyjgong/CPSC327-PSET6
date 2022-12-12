@@ -16,11 +16,11 @@ class Board:
 
       #setup workers
       self._worker_names = [['A', 'B'], ['Y', 'Z']]
-      self._workers = [[None for _ in range(0,2)] for _ in range(0,2)]
-      self._workers[0][0] = self._positions[1][3]
-      self._workers[0][1] = self._positions[3][1]
-      self._workers[1][0] = self._positions[1][1]
-      self._workers[1][1] = self._positions[3][3]
+      self._workers = {}
+      self._workers['A'] = self._positions[1][3]
+      self._workers['B'] = self._positions[3][1]
+      self._workers['Y'] = self._positions[1][1]
+      self._workers['Z'] = self._positions[3][3]
 
       #setup variables for iterator
       self._curr_iter_idx = None
@@ -57,8 +57,9 @@ class Board:
             has_worker = False
             for p in range(0,2):
                for w in range(0,2):
-                  if self._workers[p][w].r == r and self._workers[p][w].c == c:
-                     board_str_lst.append(self._worker_names[p][w])
+                  worker_name = self._worker_names[p][w]
+                  if self._workers[worker_name].r == r and self._workers[worker_name].c == c:
+                     board_str_lst.append(worker_name)
                      has_worker = True
             if not has_worker:
                board_str_lst.append(' ')
