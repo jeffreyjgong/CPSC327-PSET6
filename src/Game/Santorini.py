@@ -19,15 +19,12 @@ class Santorini(TwoPlayerGame):
       self._blue_player_type = kwargs.get('blue_player_type')
       self._enable_score_display = kwargs.get('enable_score_display')
       self._board = Board()
-      self._turn_number = 1
       self._white_id = 0
       self._blue_id = 1
       self._players = [Player(None, None) for _ in range(0,2)]
       self._player_factory = PlayerFactory()
       self._players[self._white_id] = self._player_factory.get_player(self._white_player_type, self._white_id, self._board)
       self._players[self._blue_id] = self._player_factory.get_player(self._blue_player_type, self._blue_id, self._board)
-      
-      self._cur_player_id = self._white_id
 
       super().__init__(**kwargs)
    
@@ -91,11 +88,5 @@ class Santorini(TwoPlayerGame):
       
       # print board
       print(self._board)
-      
-      # add to turn
-      self._turn_number += 1
-
-      # switch players
-      self._cur_player_id = 1 - self._cur_player_id
       
       return True

@@ -1,12 +1,15 @@
 class TwoPlayerGame:
    """
-   An abstract template class to setup a two player game
+   An abstract template class to setup a two player game: supports undo/redo functionality
    """
    def __init__(self, **kwargs):
       """
       Initializes the class; enable_undo_redo is a required
       keyword argument for any game
       """
+      self._cur_player_id = 0
+      self._turn_number = 1
+      
       self._enable_undo_redo = kwargs.get('enable_undo_redo')
       
       if self._enable_undo_redo == 'on':
@@ -18,6 +21,7 @@ class TwoPlayerGame:
       Gets next turn from current player
       Returns false is game is over
       """
+      
       if self._enable_undo_redo == 'on':
          history_choice = ''
          valid_choices = ['undo', 'redo', 'next']
@@ -32,7 +36,11 @@ class TwoPlayerGame:
             self._redo_step()
       else:
          if not self._perform_move():
+            self._cur_player_id = 1 - self._cur_player_id
+            self._turn_number += 1
             return False
+      self._turn_number += 1
+      self._cur_player_id = 1 - self._cur_player_id
       return True
          
    def _perform_move(self):

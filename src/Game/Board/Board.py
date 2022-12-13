@@ -1,4 +1,5 @@
 from .Position import Position
+from .GamePositions import GamePositions
 
 class Board:
    """
@@ -12,23 +13,20 @@ class Board:
          A and Y represent worker 0, B and Z represent worker 1
       """
 
-      self._positions = [[Position(r, c) for c in range(0,5)] for r in range(0,5)]
+      self._positions = GamePositions()
 
       #setup workers
       self._worker_names = [['A', 'B'], ['Y', 'Z']]
       self._workers = {}
-      self._workers['A'] = self._positions[3][1]
-      self._workers['B'] = self._positions[1][3]
-      self._workers['Y'] = self._positions[1][1]
-      self._workers['Z'] = self._positions[3][3]
+      self._workers['A'] = self._positions.pos_arr[3][1]
+      self._workers['B'] = self._positions.pos_arr[1][3]
+      self._workers['Y'] = self._positions.pos_arr[1][1]
+      self._workers['Z'] = self._positions.pos_arr[3][3]
 
       #setup variables for iterator
       self._curr_iter_idx = None
       self._iter_center_r = 0
       self._iter_center_c = 0
-
-      # top down, left to right
-      self._neighbor_offset = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]
 
       # directions to position offsets
       self._direction_dict = {'nw': [-1,-1], 'n': [-1,0], 'ne': [-1,1], 'w': [0,-1], 'e': [0,1], 'sw': [1,-1], 's': [1,0], 'se': [1,1]}
@@ -47,17 +45,17 @@ class Board:
       """
       return self._workers[worker_name].h
 
-   def _is_valid_and_free_loc(self, r, c):
+   def _is_free_loc(self, pos):
       """
-         Checks if a position on the board is both valid and free
+         Checks if a position on the board is free
       """
-      #check if out of bounds or if it contains a dome
-      if r < 0 or r >= 5 or c < 0 or c >= 5 or self._positions[r][c].h == 4:
+      #check if it contains a dome
+      if pos.h == 4:
          return False
       
       #See if a worker is occupying that tile
       for worker_name in self._workers.keys():
-         if self._positions[r][c].check_same_pos(self._workers[worker_name]):
+         if pos.check_same_pos(self._workers[worker_name]):
             return False
       return True
       
@@ -67,7 +65,9 @@ class Board:
       """
       r = self._workers[worker_name].r + self._direction_dict[direction][0]
       c = self._workers[worker_name].c + self._direction_dict[direction][1]
-      return self._is_valid_and_free_loc(r,c)
+      if r < 0 or r >= 5 or c < 0 or c >= 5:
+         return False
+      return self._is_free_loc(self._positions.pos_arr[r][c])
       
    def validate_move_direction(self, worker_name, direction):
       """
@@ -75,11 +75,13 @@ class Board:
       """
       r = self._workers[worker_name].r + self._direction_dict[direction][0]
       c = self._workers[worker_name].c + self._direction_dict[direction][1]
-      if not self._is_valid_and_free_loc(r,c):
+      if r < 0 or r >= 5 or c < 0 or c >= 5:
+         return False
+      if not self._is_free_loc(self._positions.pos_arr[r][c]):
          return False
       
       #worker's height can increase by a max of 1
-      if self._positions[r][c].h - self._workers[worker_name].h > 1:
+      if self._positions.pos_arr[r][c].h - self._workers[worker_name].h > 1:
          return False
       
       return True
@@ -88,19 +90,19 @@ class Board:
       """
       Moves the specified worker
       """
-      self._workers[worker_name] = self._positions[self._workers[worker_name].r + self._direction_dict[direction][0]][self._workers[worker_name].c + self._direction_dict[direction][1]]
+      self._workers[worker_name] = self._positions.pos_arr[self._workers[worker_name].r + self._direction_dict[direction][0]][self._workers[worker_name].c + self._direction_dict[direction][1]]
 
    def build_from_worker(self, worker_name, direction):
       """
       Builds from the specified worker
       """
-      self._positions[self._workers[worker_name].r + self._direction_dict[direction][0]][self._workers[worker_name].c + self._direction_dict[direction][1]].h += 1
+      self._positions.pos_arr[self._workers[worker_name].r + self._direction_dict[direction][0]][self._workers[worker_name].c + self._direction_dict[direction][1]].h += 1
    
    def undo_build_from_worker(self, worker_name, direction):
       """
       Undoes build from the specified worker
       """
-      self._positions[self._workers[worker_name].r + self._direction_dict[direction][0]][self._workers[worker_name].c + self._direction_dict[direction][1]].h -= 1
+      self._positions.pos_arr[self._workers[worker_name].r + self._direction_dict[direction][0]][self._workers[worker_name].c + self._direction_dict[direction][1]].h -= 1
 
    def worker_has_possible_move_and_build(self, worker_name):
       """
@@ -110,33 +112,19 @@ class Board:
          #check if valid move direction
          if self.validate_move_direction(worker_name, move_dir):
             #temporarily move worker to valid move direction
-            self._workers[worker_name] = self._positions[self._workers[worker_name].r + self._direction_dict[move_dir][0]][self._workers[worker_name].c + self._direction_dict[move_dir][1]]
+            self._workers[worker_name] = self._positions.pos_arr[self._workers[worker_name].r + self._direction_dict[move_dir][0]][self._workers[worker_name].c + self._direction_dict[move_dir][1]]
             #check if valid build direction
-            for build_dir in self._direction_dict.keys():
-               if self.validate_build_direction(worker_name, build_dir):
+            self._positions.set_iter_center(self._workers[worker_name].r, self._workers[worker_name].c)
+            for build_pos in self._positions:
+               if self._is_free_loc(build_pos):
                   #undo temporary move
-                  self._workers[worker_name] = self._positions[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
+                  print(self._workers[worker_name].r - self._direction_dict[move_dir][0])
+                  print(self._workers[worker_name].c - self._direction_dict[move_dir][1])
+                  self._workers[worker_name] = self._positions.pos_arr[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
                   return True
       #undo temporary move
-      self._workers[worker_name] = self._positions[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
+      self._workers[worker_name] = self._positions.pos_arr[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
       return False
-
-   def set_iter_center(self, r, c):
-      self._iter_center_r = r
-      self._iter_center_c = c
-
-   def __iter__(self):
-      self._curr_iter_idx = 0
-      return self
-
-   def __next__(self):
-      while self._curr_iter_idx < len(self._neighbor_offset):
-         r = self._iter_center_r + self._neighbor_offset[self._curr_iter_idx][0]
-         c = self._iter_center_c + self._neighbor_offset[self._curr_iter_idx][1]
-         self._curr_iter_idx += 1
-         if r >= 0 and r < 5 and c >= 0 and c < 5:
-            return self._positions[r][c]
-      raise StopIteration
 
    def __str__(self):
       board_str_lst = []
@@ -144,7 +132,7 @@ class Board:
          board_str_lst.append('+--+--+--+--+--+\n')
          for c in range(0,5):
             board_str_lst.append('|')
-            board_str_lst.append(str(self._positions[r][c].h))
+            board_str_lst.append(str(self._positions.pos_arr[r][c].h))
             has_worker = False
             for p in range(0,2):
                for w in range(0,2):
