@@ -12,7 +12,7 @@ class HumanPlayer(Player):
       valid_worker_name = False
       worker_name = ''
       while(not valid_worker_name):
-         worker_name = input(self._worker_prompt)
+         worker_name = input(self._worker_prompt + '\n')
          if (worker_name not in self.workers and worker_name not in other_player.workers):
             print('Not a valid worker')
          elif (worker_name in other_player.workers):
@@ -29,7 +29,7 @@ class HumanPlayer(Player):
       valid_move_direction = False
       move_direction = ''
       while(not valid_move_direction):
-         move_direction = input(self._move_prompt)
+         move_direction = input(self._move_prompt + '\n')
          if (not self._board.validate_direction(move_direction)):
             print('Not a valid direction')
          elif (not self._board.validate_move_direction(worker_name, move_direction)):
@@ -42,7 +42,7 @@ class HumanPlayer(Player):
       valid_build_direction = False
       build_direction = ''
       while(not valid_build_direction):
-         build_direction = input(self._direction_prompt)
+         build_direction = input(self._direction_prompt + '\n')
          if (not self._board.validate_direction(build_direction)):
             print('Not a valid direction')
          elif (not self._board.validate_build_direction(worker_name, build_direction)):

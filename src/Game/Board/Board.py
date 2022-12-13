@@ -45,14 +45,14 @@ class Board:
       """
       Returns a worker to height dictionary
       """
-      return self._workers[worker_name]
+      return self._workers[worker_name].h
 
    def _is_valid_and_free_loc(self, r, c):
       """
          Checks if a position on the board is both valid and free
       """
       #check if out of bounds or if it contains a dome
-      if r < 0 or r >= 5 or c < 0 or c > 5 or self._positions[r][c].h == 4:
+      if r < 0 or r >= 5 or c < 0 or c >= 5 or self._positions[r][c].h == 4:
          return False
       
       #See if a worker is occupying that tile

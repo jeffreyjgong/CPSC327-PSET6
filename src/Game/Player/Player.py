@@ -5,16 +5,21 @@ class Player:
    
    def __init__(self, player_id, board):
       self._board = board
-      self.player_id = player_id
-      if (self.player_id == 0):
+      self._player_id = player_id
+      if (self._player_id == 0):
          self._color = "white"
          self._workers = ['A', 'B']
       else:
          self._color = "blue"
          self._workers = ['Y', 'Z']
-      self._worker_prompt = 'Select a worker to move\n'
-      self._move_prompt = 'Select a direction to move (n, ne, e, se, s, sw, w, nw)\n'
-      self._direction_prompt = 'Select a direction to build (n, ne, e, se, s, sw, w, nw)\n'
+      self._worker_prompt = 'Select a worker to move'
+      self._move_prompt = 'Select a direction to move (n, ne, e, se, s, sw, w, nw)'
+      self._direction_prompt = 'Select a direction to build (n, ne, e, se, s, sw, w, nw)'
+      
+   def _get_player_id(self):
+      return self._player_id
+   
+   player_id = property(fget=_get_player_id, doc='player id')
       
    def _get_color(self):
       return self._color

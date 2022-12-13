@@ -16,6 +16,7 @@ class TwoPlayerGame:
    def get_next_turn(self):
       """
       Gets next turn from current player
+      Returns false is game is over
       """
       if self._enable_undo_redo == 'on':
          history_choice = ''
@@ -30,11 +31,13 @@ class TwoPlayerGame:
          else:
             self._redo_step()
       else:
-         self._perform_move()  
+         if not self._perform_move():
+            return False
+      return True
          
    def _perform_move(self):
       """
-      Performs the move, exits if game is over
+      Performs the move, returns False if game is over
       """
       pass
    

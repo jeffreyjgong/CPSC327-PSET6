@@ -44,7 +44,7 @@ class Santorini(TwoPlayerGame):
       
       print(turn_string)
       
-      super().get_next_turn()
+      return super().get_next_turn()
 
 
    def _perform_move(self):
@@ -54,12 +54,12 @@ class Santorini(TwoPlayerGame):
       # check if other player has won (worker on lvl 3)
       if other_player.has_won():
          print(other_player.color + " has won")
-         sys.exit(0)
+         return False
 
       # check if curr player cannot move and build (other player wins)
       if len(cur_player.get_movable_workers()) == 0:
          print(other_player.color + " has won")
-         sys.exit(0)
+         return False
 
       worker_name = cur_player.select_worker(other_player)
       move_direction = cur_player.select_move_direction(worker_name, other_player)
@@ -97,3 +97,5 @@ class Santorini(TwoPlayerGame):
 
       # switch players
       self._cur_player_id = 1 - self._cur_player_id
+      
+      return True
