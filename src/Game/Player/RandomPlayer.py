@@ -1,4 +1,5 @@
 from .Player import Player
+from random import random
 
 class RandomPlayer(Player):
    """

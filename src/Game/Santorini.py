@@ -21,8 +21,6 @@ class Santorini(TwoPlayerGame):
       self._turn_number = 1
       self._white_id = 0
       self._blue_id = 1
-      self._history = [None] #none maintained at end of current history for redo edge casing behavior
-      self._history_idx = -1 #position of last performed command
       self._players = [Player(None, None) for _ in range(0,2)]
       self._player_factory = PlayerFactory()
       self._players[self._white_id] = self._player_factory.get_player(self._white_player_type, self._white_id, self._board)
@@ -32,6 +30,7 @@ class Santorini(TwoPlayerGame):
 
       super().__init__(**kwargs)
    
+
    def get_next_turn(self):
       cur_player = self._players[self._cur_player_id]
       turn_string = f'Turn: {self._turn_number}, {cur_player.color} ({cur_player.workers[0]}{cur_player.workers[1]})'
@@ -44,20 +43,7 @@ class Santorini(TwoPlayerGame):
       
       print(turn_string)
       
-      if (self._enable_undo_redo == 'on'):
-         history_choice = ''
-         valid_choices = ['undo', 'redo', 'next']
-         while(history_choice not in valid_choices):
-            history_choice = input('undo, redo, or next\n')
-         
-         if (history_choice == 'next'):
-            self._perform_move()
-         elif (history_choice == 'undo'):
-            self._undo_step()
-         else:
-            self._redo_step()
-      else:
-         self._perform_move()  
+      super().get_next_turn()
 
 
    def _perform_move(self):
@@ -65,7 +51,13 @@ class Santorini(TwoPlayerGame):
 
       # check if other player has won (worker on lvl 3)
 
-      # check if cur player cannot move and build (other player wins)
+      # check if curr player cannot move and build (other player wins)
+      movable_workers = 0
+      for worker_name in self._players[self._cur_player_id].workers:
+         if self._board.worker_has_possible_move_and_build(worker_name):
+            movable_workers += 1
+      if movable_workers == 0:
+         print(self._players[1 - self._cur_player_id].color + " has won")
 
       # validate worker name
       valid_worker_name = False
@@ -119,16 +111,17 @@ class Santorini(TwoPlayerGame):
       # build and execute command object, add it to history
       move = ExecuteMove(worker_name, move_direction, build_direction)
       move.execute(self._board)
-      self._history_idx += 1 
-      if len(self._history) == self._history_idx:
-         self._history.append(move)
-         self._history.append(None)
-      else:
-         self._history[self._history_idx] = move
-         if len(self._history) == self._history_idx + 1:
+      if self._enable_undo_redo == 'on':
+         self._history_idx += 1 
+         if len(self._history) == self._history_idx:
+            self._history.append(move)
             self._history.append(None)
          else:
-            self._history[self._history_idx + 1] = None
+            self._history[self._history_idx] = move
+            if len(self._history) == self._history_idx + 1:
+               self._history.append(None)
+            else:
+               self._history[self._history_idx + 1] = None
       
       # print board
       print(self._board)
@@ -138,21 +131,3 @@ class Santorini(TwoPlayerGame):
 
       # switch players
       self._cur_player_id = 1 - self._cur_player_id
-      
-   
-   def _undo_step(self):
-      """Returns true on success, false on failure"""
-      if self._history_idx == -1:
-         return False
-      self._history[self._history_idx].undo(self._board)
-      self._history_idx -= 1
-      return True
-   
-   
-   def _redo_step(self):
-      """Returns true on success, false on failure"""
-      if self._history[self._history_idx + 1] == None:
-         return False
-      self._history_idx += 1
-      self._history[self._history_idx].execute(self._board)
-      return True
