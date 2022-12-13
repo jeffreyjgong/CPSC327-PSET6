@@ -14,7 +14,7 @@ class RandomPlayer(Player):
       movable_workers = []
       for worker_name in self._players[self._cur_player_id].workers:
          if self._board.worker_has_possible_move_and_build(worker_name):
-            movable_workers += 1
+            movable_workers.append()
       if movable_workers == 0:
          print(self._players[1 - self._cur_player_id].color + " has won")
       return super().select_worker()

@@ -51,14 +51,28 @@ class Player:
             movable_workers.append(worker_name)
       return movable_workers 
    
-   def _get_valid_move_directions(self):
+   def _get_valid_move_directions(self, worker_name):
       """
       Returns a list of valid move directions
       """
-      pass
-   
-   def _get_valid_build_directions(self):
+      possible_directions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
+      valid_directions = []
+      for dir in possible_directions:
+         if not self._board.validate_direction(dir):
+            continue
+         if self._board.validate_move_direction(worker_name, dir):
+            valid_directions.append(dir)
+      return valid_directions
+      
+   def _get_valid_build_directions(self, worker_name):
       """
-      Returns a list of valid move directions
+      Returns a list of valid build directions
       """
-      pass
+      possible_directions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
+      valid_directions = []
+      for dir in possible_directions:
+         if not self._board.validate_direction(dir):
+            continue
+         if self._board.validate_build_direction(worker_name, dir):
+            valid_directions.append(dir)
+      return valid_directions
