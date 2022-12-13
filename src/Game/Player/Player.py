@@ -23,20 +23,56 @@ class Player:
    
    workers = property(fget=_get_workers, doc='player workers')
 
-   def select_worker(self):
+   def select_worker(self, other_player):
       """
       Returns which worker is moving
       """
       pass
 
-   def select_direction(self):
+   def select_move_direction(self, worker_name, other_player):
       """
       Returns which direction to move worker in
       """
       pass
 
-   def select_build_direction(self):
+   def select_build_direction(self, worker_name, other_player):
       """
       Returns the direction to build in
       """
       pass
+   
+   def get_movable_workers(self):
+      """
+      Returns a list of worker names for movable workers 
+      """
+      movable_workers = []
+      for worker_name in self.workers:
+         if self._board.worker_has_possible_move_and_build(worker_name):
+            movable_workers.append(worker_name)
+      return movable_workers 
+   
+   def _get_valid_move_directions(self, worker_name):
+      """
+      Returns a list of valid move directions
+      """
+      possible_directions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
+      valid_directions = []
+      for dir in possible_directions:
+         if not self._board.validate_direction(dir):
+            continue
+         if self._board.validate_move_direction(worker_name, dir):
+            valid_directions.append(dir)
+      return valid_directions
+      
+   def _get_valid_build_directions(self, worker_name):
+      """
+      Returns a list of valid build directions
+      """
+      possible_directions = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw']
+      valid_directions = []
+      for dir in possible_directions:
+         if not self._board.validate_direction(dir):
+            continue
+         if self._board.validate_build_direction(worker_name, dir):
+            valid_directions.append(dir)
+      return valid_directions
