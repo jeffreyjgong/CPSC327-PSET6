@@ -4,7 +4,6 @@ from .Player.PlayerFactory import PlayerFactory
 from .Player.Player import Player
 from .Score import Score
 from .Moves.ExecuteMove import ExecuteMove
-import sys
 
 class Santorini(TwoPlayerGame):
    """
