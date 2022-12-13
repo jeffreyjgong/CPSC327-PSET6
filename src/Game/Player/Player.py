@@ -12,6 +12,9 @@ class Player:
       else:
          self._color = "blue"
          self._workers = ['Y', 'Z']
+      self._worker_prompt = 'Select a worker to move\n'
+      self._move_prompt = 'Select a direction to move (n, ne, e, se, s, sw, w, nw)\n'
+      self._direction_prompt = 'Select a direction to build (n, ne, e, se, s, sw, w, nw)\n'
       
    def _get_color(self):
       return self._color
@@ -23,6 +26,15 @@ class Player:
    
    workers = property(fget=_get_workers, doc='player workers')
 
+   def has_won(self):
+      """
+      Returns true if there is an l3 worker
+      """
+      for worker_name in self._workers:
+         if self._board.get_worker_height(worker_name) == 3:
+            return True
+      return False
+   
    def select_worker(self, other_player):
       """
       Returns which worker is moving
