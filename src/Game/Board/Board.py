@@ -31,7 +31,7 @@ class Board:
       self._neighbor_offset = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]
 
       # directions to position offsets
-      self._direction_dict = {'nw': [-1,-1], 'n': [0,-1], 'ne': [1,-1], 'w': [-1,0], 'e': [1,0], 'sw': [-1,1], 's': [0,1], 'se': [1,1]}
+      self._direction_dict = {'nw': [-1,-1], 'n': [-1,0], 'ne': [-1,1], 'w': [0,-1], 'e': [0,1], 'sw': [1,-1], 's': [1,0], 'se': [1,1]}
       
    def validate_direction(self, dir):
       """
@@ -40,70 +40,81 @@ class Board:
       if dir in self._direction_dict.keys():
          return True
       return False
+
+   def _is_valid_and_free_loc(self, r, c):
+      """
+         Checks if a position on the board is both valid and free
+      """
+      #check if out of bounds or if it contains a dome
+      if r < 0 or r >= 5 or c < 0 or c > 5 or self._positions[r][c].h == 4:
+         return False
+      
+      #See if a worker is occupying that tile
+      for worker_name in self._workers.keys():
+         if self._positions[r][c].check_same_pos(self._workers[worker_name]):
+            return False
+      return True
+      
+      
+   def validate_build_direction(self, worker_name, direction):
+      """
+      Checks if the build direction for the specified worker is valid
+      """
+      r = self._workers[worker_name].r + self._direction_dict[direction][0]
+      c = self._workers[worker_name].c + self._direction_dict[direction][1]
+      return self._is_valid_and_free_loc(r,c)
       
    def validate_move_direction(self, worker_name, direction):
       """
       Checks if the move direction for the specified worker is valid
       """
-      move_tile = Position(self._workers[worker_name].r + self._direction_dict[direction][0],self._workers[worker_name].c + self._direction_dict[direction][1])
-      
-      #check if out of bounds or if it contains a dome
-      if move_tile.r < 0 or move_tile.r >= 5 or move_tile.c < 0 or move_tile.c > 5 or move_tile.h == 4:
+      r = self._workers[worker_name].r + self._direction_dict[direction][0]
+      c = self._workers[worker_name].c + self._direction_dict[direction][1]
+      if not self._is_valid_and_free_loc(r,c):
          return False
       
-      #See if a worker is occupying that tile
-      for worker_name in self._workers.keys():
-         if move_tile.check_same_pos(self._workers[worker_name]):
-            return False
-      return True
-
-   def validate_build_direction(self, worker_name, direction):
-      """
-      Checks if the build direction for the specified worker is valid
-      """
-      build_tile = Position(self._workers[worker_name].r + self._direction_dict[direction][0],self._workers[worker_name].c + self._direction_dict[direction][1])
-      if build_tile.h == 4:
+      #worker's height can increase by a max of 1
+      if self._positions[r][c].h - self._workers[worker_name].h > 1:
          return False
-      return True
       
+      return True
       
    def move_worker(self, worker_name, direction):
       """
       Moves the specified worker
       """
-      pass
+      self._workers[worker_name] = self._positions[self._workers[worker_name].r + self._direction_dict[direction][0]][self._workers[worker_name].c + self._direction_dict[direction][1]]
 
-   def build_from_worker(self, worker_name, build_direction):
+   def build_from_worker(self, worker_name, direction):
       """
       Builds from the specified worker
       """
-      pass
+      self._positions[self._workers[worker_name].r + self._direction_dict[direction][0]][self._workers[worker_name].c + self._direction_dict[direction][1]].h += 1
    
-   def undo_build_from_worker(self, worker_name, build_direction):
+   def undo_build_from_worker(self, worker_name, direction):
       """
       Undoes build from the specified worker
       """
-      pass
+      self._positions[self._workers[worker_name].r + self._direction_dict[direction][0]][self._workers[worker_name].c + self._direction_dict[direction][1]].h -= 1
 
    def worker_has_possible_move_and_build(self, worker_name):
       """
       Checks if the specified worker has a possible move and build
       """
-      valid_move_dir = False
-      for dir in self._direction_dict.keys():
-         if self.validate_move_direction(worker_name, dir):
-            valid_move_dir = True
-      if valid_move_dir == False:
-         return False
-      
-      valid_build_dir = False
-      for dir in self._direction_dict.keys():
-         if self.validate_build_direction(worker_name, dir):
-            valid_build_dir = True
-      if valid_build_dir == False:
-         return False
-      
-      return True
+      for move_dir in self._direction_dict.keys():
+         #check if valid move direction
+         if self.validate_move_direction(worker_name, move_dir):
+            #temporarily move worker to valid move direction
+            self._workers[worker_name] = self._positions[self._workers[worker_name].r + self._direction_dict[move_dir][0]][self._workers[worker_name].c + self._direction_dict[move_dir][1]]
+            #check if valid build direction
+            for build_dir in self._direction_dict.keys():
+               if self.validate_build_direction(worker_name, build_dir):
+                  #undo temporary move
+                  self._workers[worker_name] = self._positions[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
+                  return True
+      #undo temporary move
+      self._workers[worker_name] = self._positions[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
+      return False
 
    def _set_iter_center(self, r, c):
       self._iter_center_r = r

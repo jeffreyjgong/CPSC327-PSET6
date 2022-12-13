@@ -3,6 +3,7 @@ from .TwoPlayerGame import TwoPlayerGame
 from .Player.PlayerFactory import PlayerFactory
 from .Player.Player import Player
 from .Score import Score
+from .Moves.ExecuteMove import ExecuteMove
 
 class Santorini(TwoPlayerGame):
    """
@@ -20,14 +21,14 @@ class Santorini(TwoPlayerGame):
       self._turn_number = 1
       self._white_id = 0
       self._blue_id = 1
+      self._history = [None] #none maintained at end of current history for redo edge casing behavior
+      self._history_idx = -1 #position of last performed command
       self._players = [Player(None, None) for _ in range(0,2)]
       self._player_factory = PlayerFactory()
       self._players[self._white_id] = self._player_factory.get_player(self._white_player_type, self._white_id, self._board)
       self._players[self._blue_id] = self._player_factory.get_player(self._blue_player_type, self._blue_id, self._board)
       
       self._cur_player_id = self._white_id
-
-      # TODO: add history of commands
 
       super().__init__(**kwargs)
    
@@ -96,7 +97,8 @@ class Santorini(TwoPlayerGame):
             valid_move_direction = True
       
       # move worker temporarily
-      self._board.move_worker(worker_name, move_direction)
+      temp_move = ExecuteMove(worker_name, move_direction, None)
+      temp_move.execute(self._board)
 
       # validate build direction with updated worker position
       valid_build_direction = False
@@ -112,14 +114,22 @@ class Santorini(TwoPlayerGame):
             valid_build_direction = True
 
       # revert temporary move
-      self._board.move_worker(worker_name, self._board.directional_opposites[move_direction])
+      temp_move.undo(self._board)
 
-      # build command object
+      # build and execute command object, add it to history
+      move = ExecuteMove(worker_name, move_direction, build_direction)
+      move.execute(self._board)
+      self._history_idx += 1 
+      if len(self._history) == self._history_idx:
+         self._history.append(move)
+         self._history.append(None)
+      else:
+         self._history[self._history_idx] = move
+         if len(self._history) == self._history_idx + 1:
+            self._history.append(None)
+         else:
+            self._history[self._history_idx + 1] = None
       
-      # execute command
-
-      # add command object to history
-
       # print board
       print(self._board)
       
@@ -131,7 +141,18 @@ class Santorini(TwoPlayerGame):
       
    
    def _undo_step(self):
-      pass
+      """Returns true on success, false on failure"""
+      if self._history_idx == -1:
+         return False
+      self._history[self._history_idx].undo(self._board)
+      self._history_idx -= 1
+      return True
+   
    
    def _redo_step(self):
-      pass
+      """Returns true on success, false on failure"""
+      if self._history[self._history_idx + 1] == None:
+         return False
+      self._history_idx += 1
+      self._history[self._history_idx].execute(self._board)
+      return True
