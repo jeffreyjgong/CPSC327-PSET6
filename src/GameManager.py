@@ -19,5 +19,5 @@ class GameManager:
       print(self._game._board)
 
       # next turn
-      while(True):
-         self._game.get_next_turn()
+      while(self._game.get_next_turn()):
+         pass

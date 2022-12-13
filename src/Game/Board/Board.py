@@ -40,13 +40,19 @@ class Board:
       if dir in self._direction_dict.keys():
          return True
       return False
+   
+   def get_worker_height(self, worker_name):
+      """
+      Returns a worker to height dictionary
+      """
+      return self._workers[worker_name].h
 
    def _is_valid_and_free_loc(self, r, c):
       """
          Checks if a position on the board is both valid and free
       """
       #check if out of bounds or if it contains a dome
-      if r < 0 or r >= 5 or c < 0 or c > 5 or self._positions[r][c].h == 4:
+      if r < 0 or r >= 5 or c < 0 or c >= 5 or self._positions[r][c].h == 4:
          return False
       
       #See if a worker is occupying that tile
@@ -54,7 +60,6 @@ class Board:
          if self._positions[r][c].check_same_pos(self._workers[worker_name]):
             return False
       return True
-      
       
    def validate_build_direction(self, worker_name, direction):
       """
@@ -116,7 +121,7 @@ class Board:
       self._workers[worker_name] = self._positions[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
       return False
 
-   def _set_iter_center(self, r, c):
+   def set_iter_center(self, r, c):
       self._iter_center_r = r
       self._iter_center_c = c
 
