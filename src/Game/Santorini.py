@@ -48,62 +48,23 @@ class Santorini(TwoPlayerGame):
 
    def _perform_move(self):
       cur_player = self._players[self._cur_player_id]
+      other_player = self._players[1 - self._cur_player_id]
 
       # check if other player has won (worker on lvl 3)
 
       # check if curr player cannot move and build (other player wins)
-      movable_workers = 0
-      for worker_name in self._players[self._cur_player_id].workers:
-         if self._board.worker_has_possible_move_and_build(worker_name):
-            movable_workers += 1
-      if movable_workers == 0:
-         print(self._players[1 - self._cur_player_id].color + " has won")
+      if len(cur_player.get_movable_workers()) == 0:
+         print(other_player.color + " has won")
 
-      # validate worker name
-      valid_worker_name = False
-      worker_name = ''
-      while(not valid_worker_name):
-         worker_name = cur_player.select_worker()
-         if (worker_name not in self._players[0].workers and worker_name not in self._players[1].workers):
-            print('Not a valid worker')
-         elif (worker_name in self._players[1-self._cur_player_id].workers):
-            print('That is not your worker')
-         else:
-            # TODO: check if this is the right string to print
-            if (not self._board.worker_has_possible_move_and_build(worker_name)):
-               print('No possible moves for this worker')
-            else:
-               valid_worker_name = True
-
-      # validate move direction
-      valid_move_direction = False
-      move_direction = ''
-      
-      while(not valid_move_direction):
-         move_direction = cur_player.select_direction()
-         if (not self._board.validate_direction(move_direction)):
-            print('Not a valid direction')
-         elif (not self._board.validate_move_direction(worker_name, move_direction)):
-            print('Cannot move ' + move_direction)
-         else:
-            valid_move_direction = True
+      worker_name = cur_player.select_worker(other_player)
+      move_direction = cur_player.select_move_direction(worker_name, other_player)
       
       # move worker temporarily
       temp_move = ExecuteMove(worker_name, move_direction, None)
       temp_move.execute(self._board)
 
       # validate build direction with updated worker position
-      valid_build_direction = False
-      build_direction = ''
-
-      while(not valid_build_direction):
-         build_direction = cur_player.select_build_direction()
-         if (not self._board.validate_direction(build_direction)):
-            print('Not a valid direction')
-         elif (not self._board.validate_build_direction(worker_name, build_direction)):
-            print('Cannot build ' + build_direction)
-         else:
-            valid_build_direction = True
+      build_direction = cur_player.select_build_direction(worker_name, other_player)
 
       # revert temporary move
       temp_move.undo(self._board)
