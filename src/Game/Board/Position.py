@@ -27,3 +27,8 @@ class Position:
    
    def __str__(self):
       return '(' + str(self._r) + ',' + str(self._c) + ') h:' + str(self._h)
+   
+   def check_same_pos(self, pos2):
+      if self.r == pos2.r and self.c == pos2.c:
+         return True
+      return False
