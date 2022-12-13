@@ -30,27 +30,38 @@ class Board:
       # top down, left to right
       self._neighbor_offset = [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]
 
-      # directions
-      self.directions = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']
-
-      self.direction_dict = {}
-      for i,d in enumerate(self.directions):
-         self.direction_dict[d] = self._neighbor_offset[i]
+      # directions to position offsets
+      self._direction_dict = {'nw': [-1,-1], 'n': [0,-1], 'ne': [1,-1], 'w': [-1,0], 'e': [1,0], 'sw': [-1,1], 's': [0,1], 'se': [1,1]}
       
-      self.directional_opposites = {'nw': 'se', 'n': 's', 'ne': 'sw', 'w': 'e', 'e': 'w', 'sw': 'ne', 's': 'n', 'se': 'nw'}
+      self._directional_opposites = {'nw': 'se', 'n': 's', 'ne': 'sw', 'w': 'e', 'e': 'w', 'sw': 'ne', 's': 'n', 'se': 'nw'}
 
    def validate_move_direction(self, worker_name, direction):
       """
       Checks if the move direction for the specified worker is valid
       """
-      pass
+      move_tile = Position(self._workers[worker_name].x + self._direction_dict[direction].x,self._workers[worker_name].y + self._direction_dict[direction].y)
+      
+      #check if out of bounds or if it contains a dome
+      if move_tile.x < 0 or move_tile.x >= 5 or move_tile.y < 0 or move_tile.y > 5 or move_tile.h == 4:
+         return False
+      
+      #See if a worker is occupying that tile
+      for worker_name in self._workers.keys():
+         if move_tile.check_same_pos(self._workers[worker_name]):
+            return False
+      
+      return True
 
-   def validate_build_direction(self, worker_name, build_direction):
+   def validate_build_direction(self, worker_name, direction):
       """
       Checks if the build direction for the specified worker is valid
       """
-      pass
-
+      build_tile = Position(self._workers[worker_name].x + self._direction_dict[direction].x,self._workers[worker_name].y + self._direction_dict[direction].y)
+      if build_tile.h == 4:
+         return False
+      return True
+      
+      
    def move_worker(self, worker_name, direction):
       """
       Moves the specified worker
@@ -67,7 +78,19 @@ class Board:
       """
       Checks if the specified worker has a possible move and build
       """
-      pass
+      valid_move_dir = False
+      for dir in self._direction_dict.keys():
+         if self.validate_move_direction(worker_name, dir):
+            valid_move_dir = True
+      if valid_move_dir == False:
+         return False
+      
+      valid_build_dir = False
+      for dir in self._direction_dict.keys():
+         if self.validate_build_direction(worker_name, dir):
+            valid_build_dir = True
+      if valid_build_dir == False:
+         return False
 
    def _set_iter_center(self, r, c):
       self._iter_center_r = r
