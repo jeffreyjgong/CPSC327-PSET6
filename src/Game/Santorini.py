@@ -33,7 +33,6 @@ class Santorini(TwoPlayerGame):
       turn_string = f'Turn: {self._turn_number}, {cur_player.color} ({cur_player.workers[0]}{cur_player.workers[1]})'
 
       if (self._enable_score_display == 'on'):
-         # TODO: calculate score
          cur_score = Score(self._board.height_score(self._cur_player_id), self._board.center_score(self._cur_player_id), self._board.distance_score(self._cur_player_id))
 
          turn_string += ', ' + str(cur_score)
