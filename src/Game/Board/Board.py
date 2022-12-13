@@ -124,6 +124,28 @@ class Board:
       #undo temporary move
       self._workers[worker_name] = self._positions.pos_arr[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
       return False
+   
+   def height_score(self, player_id):
+      return self._workers[self._worker_names[player_id][0]].h + self._workers[self._worker_names[player_id][1]].h 
+   
+   def center_score(self, player_id):
+      score = 0
+      for i in range(0,2):
+         worker_row = self._workers[self._worker_names[player_id][i]].r 
+         worker_col = self._workers[self._worker_names[player_id][i]].c
+
+         if (worker_row == 0 or worker_col == 0):
+            score += 0
+         elif (worker_row == 1 or worker_col == 1 or worker_row == 3 or worker_col == 3):
+            score += 1
+         else:
+            score += 2
+      
+      return score
+   
+   def distance_score(self, player_id):
+      other_player_id = 1 - player_id
+      
 
    def __str__(self):
       board_str_lst = []
