@@ -118,8 +118,8 @@ class Board:
             for build_pos in self._positions:
                if self._is_free_loc(build_pos):
                   #undo temporary move
-                  print(self._workers[worker_name].r - self._direction_dict[move_dir][0])
-                  print(self._workers[worker_name].c - self._direction_dict[move_dir][1])
+                  # print(self._workers[worker_name].r - self._direction_dict[move_dir][0])
+                  # print(self._workers[worker_name].c - self._direction_dict[move_dir][1])
                   self._workers[worker_name] = self._positions.pos_arr[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
                   return True
       #undo temporary move
@@ -143,5 +143,5 @@ class Board:
             if not has_worker:
                board_str_lst.append(' ')
          board_str_lst.append('|\n')
-      board_str_lst.append('+--+--+--+--+--+\n')
+      board_str_lst.append('+--+--+--+--+--+')
       return ''.join(board_str_lst)
