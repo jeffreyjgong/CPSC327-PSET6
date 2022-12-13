@@ -34,7 +34,7 @@ class Santorini(TwoPlayerGame):
 
       if (self._enable_score_display == 'on'):
          # TODO: calculate score
-         cur_score = Score(-1, -1, -1)
+         cur_score = Score(self._board.height_score(self._cur_player_id), self._board.center_score(self._cur_player_id), self._board.distance_score(self._cur_player_id))
 
          turn_string += ', ' + str(cur_score)
       
