@@ -1,4 +1,3 @@
-from .Position import Position
 from .GamePositions import GamePositions
 
 class Board:

@@ -1,5 +1,4 @@
 from .Player import Player
-from ..Board.Board import Board
 
 class HeuristicPlayer(Player):
    """
