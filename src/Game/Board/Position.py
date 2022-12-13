@@ -29,6 +29,6 @@ class Position:
       return '(' + str(self._r) + ',' + str(self._c) + ') h:' + str(self._h)
    
    def check_same_pos(self, pos2):
-      if self.x == pos2.x and self.y == pos2.y:
+      if self.r == pos2.r and self.c == pos2.c:
          return True
       return False

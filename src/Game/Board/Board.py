@@ -33,30 +33,35 @@ class Board:
       # directions to position offsets
       self._direction_dict = {'nw': [-1,-1], 'n': [0,-1], 'ne': [1,-1], 'w': [-1,0], 'e': [1,0], 'sw': [-1,1], 's': [0,1], 'se': [1,1]}
       
-      self._directional_opposites = {'nw': 'se', 'n': 's', 'ne': 'sw', 'w': 'e', 'e': 'w', 'sw': 'ne', 's': 'n', 'se': 'nw'}
-
+   def validate_direction(self, dir):
+      """
+      Checks if inputed direction is valid
+      """
+      if dir in self._direction_dict.keys():
+         return True
+      return False
+      
    def validate_move_direction(self, worker_name, direction):
       """
       Checks if the move direction for the specified worker is valid
       """
-      move_tile = Position(self._workers[worker_name].x + self._direction_dict[direction].x,self._workers[worker_name].y + self._direction_dict[direction].y)
+      move_tile = Position(self._workers[worker_name].r + self._direction_dict[direction][0],self._workers[worker_name].c + self._direction_dict[direction][1])
       
       #check if out of bounds or if it contains a dome
-      if move_tile.x < 0 or move_tile.x >= 5 or move_tile.y < 0 or move_tile.y > 5 or move_tile.h == 4:
+      if move_tile.r < 0 or move_tile.r >= 5 or move_tile.c < 0 or move_tile.c > 5 or move_tile.h == 4:
          return False
       
       #See if a worker is occupying that tile
       for worker_name in self._workers.keys():
          if move_tile.check_same_pos(self._workers[worker_name]):
             return False
-      
       return True
 
    def validate_build_direction(self, worker_name, direction):
       """
       Checks if the build direction for the specified worker is valid
       """
-      build_tile = Position(self._workers[worker_name].x + self._direction_dict[direction].x,self._workers[worker_name].y + self._direction_dict[direction].y)
+      build_tile = Position(self._workers[worker_name].r + self._direction_dict[direction][0],self._workers[worker_name].c + self._direction_dict[direction][1])
       if build_tile.h == 4:
          return False
       return True
@@ -71,6 +76,12 @@ class Board:
    def build_from_worker(self, worker_name, build_direction):
       """
       Builds from the specified worker
+      """
+      pass
+   
+   def undo_build_from_worker(self, worker_name, build_direction):
+      """
+      Undoes build from the specified worker
       """
       pass
 
@@ -91,6 +102,8 @@ class Board:
             valid_build_dir = True
       if valid_build_dir == False:
          return False
+      
+      return True
 
    def _set_iter_center(self, r, c):
       self._iter_center_r = r

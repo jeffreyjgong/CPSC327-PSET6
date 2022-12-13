@@ -88,7 +88,7 @@ class Santorini(TwoPlayerGame):
       
       while(not valid_move_direction):
          move_direction = cur_player.select_direction()
-         if (move_direction not in self._board.directions):
+         if (not self._board.validate_direction(move_direction)):
             print('Not a valid direction')
          elif (not self._board.validate_move_direction(worker_name, move_direction)):
             print('Cannot move ' + move_direction)
@@ -104,7 +104,7 @@ class Santorini(TwoPlayerGame):
 
       while(not valid_build_direction):
          build_direction = cur_player.select_build_direction()
-         if (build_direction not in self._board.directions):
+         if (not self._board.validate_direction(build_direction)):
             print('Not a valid direction')
          elif (not self._board.validate_build_direction(worker_name, build_direction)):
             print('Cannot build ' + build_direction)
