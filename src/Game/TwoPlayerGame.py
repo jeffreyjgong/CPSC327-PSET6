@@ -9,7 +9,7 @@ class TwoPlayerGame:
       """
       self._cur_player_id = 0
       self._turn_number = 1
-      
+
       self._enable_undo_redo = kwargs.get('enable_undo_redo')
       
       if self._enable_undo_redo == 'on':
@@ -29,11 +29,22 @@ class TwoPlayerGame:
             history_choice = input('undo, redo, or next\n')
          
          if (history_choice == 'next'):
-            self._perform_move()
+            if not self._perform_move():
+               return False
          elif (history_choice == 'undo'):
-            self._undo_step()
+            if (not self._undo_step()):
+               return True
+            else:
+               self._turn_number -= 1
+               self._cur_player_id = 1 - self._cur_player_id
+               return True
          else:
-            self._redo_step()
+            if (not self._redo_step()):
+               return True
+            else:
+               self._turn_number += 1
+               self._cur_player_id = 1 - self._cur_player_id
+               return True
       else:
          if not self._perform_move():
             self._cur_player_id = 1 - self._cur_player_id
@@ -52,17 +63,21 @@ class TwoPlayerGame:
    def _undo_step(self):
       """Returns true on success, false on failure"""
       if self._history_idx == -1:
+         print(self._board)
          return False
       self._history[self._history_idx].undo(self._board)
       self._history_idx -= 1
+      print(self._board)
       return True
    
    
    def _redo_step(self):
       """Returns true on success, false on failure"""
       if self._history[self._history_idx + 1] == None:
+         print(self._board)
          return False
       self._history_idx += 1
       self._history[self._history_idx].execute(self._board)
+      print(self._board)
       return True
    

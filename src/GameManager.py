@@ -1,4 +1,3 @@
-import sys
 from Game.Santorini import Santorini
 
 class GameManager:
