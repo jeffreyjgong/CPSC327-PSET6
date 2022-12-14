@@ -82,6 +82,9 @@ class Board:
       #worker's height can increase by a max of 1
       if self._positions.pos_arr[r][c].h - self._workers[worker_name].h > 1:
          return False
+      print(worker_name)
+      print(self._workers[worker_name])
+      print(self._positions.pos_arr[r][c])
       
       return True
       
@@ -121,8 +124,8 @@ class Board:
                   # print(self._workers[worker_name].c - self._direction_dict[move_dir][1])
                   self._workers[worker_name] = self._positions.pos_arr[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
                   return True
-      #undo temporary move
-      self._workers[worker_name] = self._positions.pos_arr[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
+            #undo temporary move
+            self._workers[worker_name] = self._positions.pos_arr[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
       return False
    
    def height_score(self, player_id):
