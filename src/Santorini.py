@@ -1,9 +1,9 @@
-from .Board.Board import Board
-from .TwoPlayerGame import TwoPlayerGame
-from .Player.PlayerFactory import PlayerFactory
-from .Player.Player import Player
-from .Score import Score
-from .Moves.ExecuteMove import ExecuteMove
+from Board import Board
+from TwoPlayerGame import TwoPlayerGame
+from PlayerFactory import PlayerFactory
+from Player import Player
+from Score import Score
+from ExecuteMove import ExecuteMove
 
 class Santorini(TwoPlayerGame):
    """

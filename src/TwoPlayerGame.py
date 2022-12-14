@@ -21,7 +21,6 @@ class TwoPlayerGame:
       Gets next turn from current player
       Returns false is game is over
       """
-      
       if self._enable_undo_redo == 'on':
          history_choice = ''
          valid_choices = ['undo', 'redo', 'next']

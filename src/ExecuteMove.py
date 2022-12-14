@@ -1,4 +1,4 @@
-from .CommandWithUndo import CommandWithUndo
+from CommandWithUndo import CommandWithUndo
 
 class ExecuteMove(CommandWithUndo):
    """

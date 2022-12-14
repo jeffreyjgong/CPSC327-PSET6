@@ -1,8 +1,8 @@
-from Game.Santorini import Santorini
+from Santorini import Santorini
 
 class GameManager:
    """
-   A class to represent the Game CLI interface
+   A class to represent the Game interface
    """
    def __init__(self):
       """
