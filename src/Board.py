@@ -147,14 +147,13 @@ class Board:
       other_player_id = 1 - player_id
       score = 0
       for i in range(0,2):
-         worker_row = self._workers[self._worker_names[player_id][i]].r 
-         worker_col = self._workers[self._worker_names[player_id][i]].c
-         other_worker_locs = [[-1, -1], [-1, -1]]
+         other_worker_row = self._workers[self._worker_names[other_player_id][i]].r 
+         other_worker_col = self._workers[self._worker_names[other_player_id][i]].c
+         worker_locs = [[-1, -1], [-1, -1]]
          for k in range(0,2):
-            other_worker_locs[k][0] = self._workers[self._worker_names[other_player_id][k]].r 
-            other_worker_locs[k][1] = self._workers[self._worker_names[other_player_id][k]].c
-         
-         score += min(max(abs(worker_row - other_worker_locs[0][0]), abs(worker_col - other_worker_locs[0][1])), max(abs(worker_row - other_worker_locs[1][0]), abs(worker_col - other_worker_locs[1][1])))
+            worker_locs[k][0] = self._workers[self._worker_names[player_id][k]].r 
+            worker_locs[k][1] = self._workers[self._worker_names[player_id][k]].c
+         score += min(max(abs(other_worker_row - worker_locs[0][0]), abs(other_worker_col - worker_locs[0][1])), max(abs(other_worker_row - worker_locs[1][0]), abs(other_worker_col - worker_locs[1][1])))
       return 8 - score
 
    def __str__(self):
