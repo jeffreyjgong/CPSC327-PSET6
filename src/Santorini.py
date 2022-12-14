@@ -66,14 +66,8 @@ class Santorini(TwoPlayerGame):
       # validate build direction with updated worker position
       build_direction = cur_player.select_build_direction(worker_name, other_player)
 
-      """print("__________")
-      print("AFTER EXECUTE")
-      print(self._board)"""
       # revert temporary move
       temp_move.undo(self._board)
-      """print("AFTER UNDO")
-      print(self._board)
-      print("__________")"""
 
       # build and execute command object, add it to history
       move = ExecuteMove(worker_name, move_direction, build_direction)

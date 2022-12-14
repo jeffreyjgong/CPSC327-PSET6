@@ -18,7 +18,7 @@ class HeuristicPlayer(Player):
       super().__init__(player_id, board)
    
    def select_worker(self, other_player):
-      (worker_choice, move_choice, build_choice) = self.calculate_heuristic()
+      (worker_choice, move_choice, build_choice) = self._calculate_heuristic()
       self._worker_choice = worker_choice
       self._move_choice = move_choice
       self._build_choice =  build_choice
@@ -31,7 +31,7 @@ class HeuristicPlayer(Player):
       print(self._worker_choice + ',' + self._move_choice + ',' + self._build_choice)
       return self._build_choice
    
-   def calculate_heuristic(self):
+   def _calculate_heuristic(self):
       movable_workers = self.get_movable_workers()
 
       # (move_score, worker_name, move_direction)

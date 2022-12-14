@@ -82,9 +82,6 @@ class Board:
       #worker's height can increase by a max of 1
       if self._positions.pos_arr[r][c].h - self._workers[worker_name].h > 1:
          return False
-      print(worker_name)
-      print(self._workers[worker_name])
-      print(self._positions.pos_arr[r][c])
       
       return True
       
@@ -120,8 +117,6 @@ class Board:
             for build_pos in self._positions:
                if self._is_free_loc(build_pos):
                   #undo temporary move
-                  # print(self._workers[worker_name].r - self._direction_dict[move_dir][0])
-                  # print(self._workers[worker_name].c - self._direction_dict[move_dir][1])
                   self._workers[worker_name] = self._positions.pos_arr[self._workers[worker_name].r - self._direction_dict[move_dir][0]][self._workers[worker_name].c - self._direction_dict[move_dir][1]]
                   return True
             #undo temporary move
@@ -137,7 +132,7 @@ class Board:
          worker_row = self._workers[self._worker_names[player_id][i]].r 
          worker_col = self._workers[self._worker_names[player_id][i]].c
 
-         if (worker_row == 0 or worker_col == 0):
+         if (worker_row == 0 or worker_col == 0 or worker_row == 4 or worker_col == 4):
             score += 0
          elif (worker_row == 1 or worker_col == 1 or worker_row == 3 or worker_col == 3):
             score += 1
