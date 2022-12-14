@@ -1,4 +1,4 @@
-from .Player import Player
+from Player import Player
 import random
 
 class RandomPlayer(Player):

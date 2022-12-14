@@ -1,4 +1,4 @@
-from .GamePositions import GamePositions
+from GamePositions import GamePositions
 
 class Board:
    """

@@ -1,4 +1,4 @@
-from Game.Santorini import Santorini
+from Santorini import Santorini
 
 class GameManager:
    """

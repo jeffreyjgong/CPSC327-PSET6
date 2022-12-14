@@ -1,6 +1,6 @@
 import sys
-from .Player import Player
-from ..Moves.ExecuteMove import ExecuteMove
+from Player import Player
+from ExecuteMove import ExecuteMove
 import random
 
 class HeuristicPlayer(Player):
